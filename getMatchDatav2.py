@@ -65,7 +65,8 @@ beginTimeVar = 1623788842
 ten_minutes = 600
 end = time() + ten_minutes
 fileName = "matchData.txt"
-while time() < end:  
+#while time() < end:  
+while True:
     regionVar = getRandRegion()
     tierVar = getRandTier()
     divisionVar = getRandDivision(tierVar)
@@ -79,7 +80,7 @@ while time() < end:
         
     cass.set_riot_api_key(getAPI_key())  # This overrides the value set in your configuration/settings.
     
-    leaguePlayers = cass.get_paginated_league_entries(queue = queueVar, tier = tierVar, division = divisionVar, region = regionVar)
+    leaguePlayers = cass.get_paginated_league_entries(queue = queueVar, tier = tierVar, division = divisionVar, region = regionVar)[:200]
     
     index = random.randint(0,200)
     if (len(leaguePlayers) < index):

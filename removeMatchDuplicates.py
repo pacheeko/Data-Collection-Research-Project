@@ -6,7 +6,7 @@ Created on Tue Nov 23 14:20:36 2021
 """
 
 #File to remove duplicate matches from
-InputFilename = "DuplicateTestData.txt"
+InputFilename = "matchData.txt"
 OutputFilename = "removedDuplicatesOutput.txt"
 
 matchIDs = []

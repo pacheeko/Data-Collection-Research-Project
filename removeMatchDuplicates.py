@@ -18,7 +18,7 @@ line = "notempty"
 while (line != ""):
     line = fileIn.readline()
     lineCut = line[1:]
-    splitline = line.split(",")
+    splitline = lineCut.split(",")
     matchID = splitline[0]
     if (matchID not in matchIDs):
         matchIDs.append(matchIDs)

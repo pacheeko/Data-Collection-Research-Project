@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec  1 16:02:07 2021
+Created on Wed Dec  1 20:22:38 2021
 
 @author: bpach
 """
 
 import numpy as np
-from sklearn.cluster import DBSCAN
 import datetime
+from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 inputFile = "removedDuplicatesOutput.txt"
+c1Output = "cluster1.txt"
+c2Output = "cluster2.txt"
+c3Output = "cluster3.txt"
 
-epsilon = 1000000
-minNeighbours = 1000
 
 testEpoch = 1623715100
 dt = datetime.datetime(2021, 6, 15, 0, 0)
@@ -72,8 +73,7 @@ def getNumFromTier(tier):
         return 3
     else:
         return 4
-
-
+    
 arr = []
 fileIn = open(inputFile, "r")
 line = "notEmpty"
@@ -83,16 +83,70 @@ while (line != ""):
     splitLine = lineCut.split(",")
     if (len(splitLine) > 1):
         matchTime = convertDatetimeToEpoch(convertMatchtimeToDatetime(splitLine[1]))
-        
         arr.append([matchTime])
  
 #getNumFromTier(splitLine[3])
 npArray = np.asarray(arr)
-data_scaler = StandardScaler().fit(arr)
-arr = data_scaler.transform(arr)
+#data_scaler = StandardScaler().fit(arr)
+#arr = data_scaler.transform(arr)
 #print(*arr)
 
-clustering = DBSCAN(eps=epsilon, min_samples=minNeighbours).fit(npArray)
-print(*clustering.labels_)
+clustering = KMeans(n_clusters=3).fit(arr)
+zeros = 0
+ones = 0
+twos = 0
+threes = 0
+fours = 0
 
+for label in clustering.labels_:
+    if (label == 0):
+        zeros += 1
+    elif (label == 1):
+        ones += 1
+    elif (label == 2):
+        twos += 1
+    elif (label == 3):
+        threes += 1
+    else:
+        fours += 1
+        
+        
+print("0s: " + str(zeros) + " 1s: " + str(ones) + " 2s: " + str(twos) + " 3s: " + str(threes) + " 4s: " + str(fours))
+cluster1 = convertEpochToDatetime(int(clustering.cluster_centers_[0]))
+cluster2 = convertEpochToDatetime(int(clustering.cluster_centers_[1]))
+cluster3 = convertEpochToDatetime(int(clustering.cluster_centers_[2]))
+#cluster4 = convertEpochToDatetime(int(clustering.cluster_centers_[3]))
+#cluster5 = convertEpochToDatetime(int(clustering.cluster_centers_[4]))
+print("Cluster 0: " + cluster1)
+print("Cluster 1: " + cluster2)
+print("Cluster 2: " + cluster3)
+#print("Cluster 3: " + cluster4)
+#print("Cluster 4: " + cluster5)
+print("Iterations: " + str(clustering.n_iter_))
+print("Deviation from cluster centroids: " + str(clustering.inertia_))
+    
+fileIn.seek(0)
+c1 = open(c1Output, "w")
+c2 = open(c2Output, "w")
+c3 = open(c3Output, "w")
+line = "notEmpty"
+it = 0
+while (it < 20634):
+    line = fileIn.readline()
+    cluster = clustering.labels_[it]
+    it += 1
+    if (cluster == 0):
+        c1.write(line)
+    elif (cluster == 1):
+        c2.write(line)
+    else:
+        c3.write(line)
 
+fileIn.close()
+c1.close()
+c2.close()
+c3.close()
+
+    
+    
+    

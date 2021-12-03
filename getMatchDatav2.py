@@ -93,7 +93,7 @@ while True:
     #Write match numbers to a file
     f = open(fileName, "a")
     for match in matches:
-         m = cass.Match(id = match.id, region = regionVar)
+         m = cass.Match(id = str(match.id), region = regionVar)
          redTeam = []
          blueTeam = []
          for p in m.participants:
@@ -121,7 +121,6 @@ while True:
              output = output + ","
              
          output = output[0:-1] + ")\n"
-         print(output)
          f.write(output)        
     
     f.close()

@@ -1,6 +1,6 @@
-# CPSC571_PROJECT
+# League of legends match data analysis
 
-This is a project for CPSC 571. We are collected league of legends game data through the riot api. 
+We collected league of legends game data through the riot api. 
 The script 'getMatchData' selects a random player from the region, tier, and division that can be set
 inside in the script. The script will output game data from the player in the following format: 
 
